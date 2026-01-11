@@ -11606,7 +11606,7 @@ const sy = {
     typeof WorkerGlobalScope < "u" &&
     self instanceof WorkerGlobalScope &&
     typeof self.importScripts == "function",
-  sk = (Bc && window.location.href) || "http://localhost",
+  sk = (Bc && window.location.href) || "https://howto.raydexhub.com/api",
   ik = Object.freeze(
     Object.defineProperty(
       {

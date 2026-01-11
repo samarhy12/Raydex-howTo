@@ -20,7 +20,7 @@ app.config['UPLOAD_FOLDER'] = 'static/uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 
 # CORS configuration
-CORS(app, supports_credentials=True, origins=['http://localhost:3000', 'http://localhost:5173'])
+CORS(app, supports_credentials=True, origins=['https://howto.raydexhub.com'])
 
 # Database initialization
 db = SQLAlchemy(app)
@@ -821,7 +821,4 @@ def internal_error(error):
 # ==================== Main ====================
 
 if __name__ == '__main__':
-    
-    print('🌐 Frontend: http://localhost:3000')
-    print('🔧 Backend: http://localhost:5000')
     app.run(host='0.0.0.0', port=5000)
