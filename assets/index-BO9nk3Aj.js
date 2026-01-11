@@ -13197,6 +13197,7 @@ const {
   ce = fe.create({
     baseURL: Vk,
     headers: { "Content-Type": "application/json" },
+    withCredentials: true,
   });
 ce.interceptors.request.use((e) => {
   const t = localStorage.getItem("user");
