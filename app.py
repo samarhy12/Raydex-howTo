@@ -821,12 +821,7 @@ def internal_error(error):
 # ==================== Main ====================
 
 if __name__ == '__main__':
-    # Initialize database
-    init_db()
     
-    # Run app
-    print('🚀 Raydex How-To Backend starting...')
-    print('📝 Admin: admin@raydex.com / admin123')
     print('🌐 Frontend: http://localhost:3000')
     print('🔧 Backend: http://localhost:5000')
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000)
