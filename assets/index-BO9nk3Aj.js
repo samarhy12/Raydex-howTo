@@ -13193,7 +13193,7 @@ const {
     getAdapter: FE,
     mergeConfig: _E,
   } = fe,
-  Vk = "http://howto.raydexhub.com/api",
+  Vk = "https://howto.raydexhub.com/api",
   ce = fe.create({
     baseURL: Vk,
     headers: { "Content-Type": "application/json" },
@@ -24816,7 +24816,7 @@ const rE = () => {
                         children: "Current Image:",
                       }),
                       u.jsx("img", {
-                        src: `http://howto.raydexhub.com/api/static/uploads/${e.data}`,
+                        src: `https://howto.raydexhub.com/api/static/uploads/${e.data}`,
                         alt: "Current",
                         className:
                           "max-w-full h-auto rounded-lg border-2 border-border shadow-md",
