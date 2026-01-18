@@ -1,0 +1,187 @@
+{% extends "base.html" %} {% block title %}My Dashboard - Raydex{% endblock %}
+{% block content %}
+<div class="min-h-screen py-12 pb-20">
+  <div class="max-w-container mx-auto px-6 md:px-8">
+    <header
+      class="flex flex-col md:flex-row md:items-start justify-between gap-6 pb-8 mb-12 border-b-2 border-border"
+    >
+      <div>
+        <h1 class="font-serif text-4xl md:text-5xl font-bold text-ink mb-2">
+          My Dashboard
+        </h1>
+        <p class="text-base text-ink-soft">
+          Track your how-to guide requests and their progress
+        </p>
+      </div>
+      <a
+        href="/request"
+        class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-accent text-surface rounded-md transition-all duration-base hover:bg-accent-soft hover:-translate-y-0.5 hover:shadow-md"
+      >
+        <i data-lucide="plus" class="w-[18px] h-[18px]"></i>
+        New Request
+      </a>
+    </header>
+    <div
+      id="statsGrid"
+      class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-12"
+    ></div>
+    <div id="filterTabs" class="flex flex-wrap gap-3 mb-8"></div>
+    <div id="requestsList"></div>
+  </div>
+</div>
+{% endblock %} {% block extra_js %}
+<script>
+  let allRequests = [];
+  let currentFilter = "all";
+  let isLoading = false;
+
+  document.addEventListener("DOMContentLoaded", () => {
+    // Check authentication first
+    const token = localStorage.getItem("token");
+    const userStr = localStorage.getItem("user");
+
+    if (!token || !userStr) {
+      // Not authenticated, redirect to login
+      window.location.href = "/login";
+      return;
+    }
+
+    try {
+      const user = JSON.parse(userStr);
+      // Make sure it's a regular user, not admin trying to access user dashboard
+      if (user.role === "admin") {
+        window.location.href = "/admin/dashboard";
+        return;
+      }
+    } catch (e) {
+      // Invalid user data
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      window.location.href = "/login";
+      return;
+    }
+
+    // Only load once if authenticated
+    if (!isLoading) {
+      loadRequests();
+    }
+  });
+
+  async function loadRequests() {
+    if (isLoading) return; // Prevent duplicate calls
+    isLoading = true;
+
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await fetch("/api/requests", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await response.json();
+      if (data.success) {
+        allRequests = data.requests;
+        renderDashboard();
+      } else {
+        showToast("Failed to load requests", "error");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      showToast("Failed to load requests", "error");
+    } finally {
+      isLoading = false;
+    }
+  }
+
+  function renderDashboard() {
+    const stats = {
+      total: allRequests.length,
+      pending: allRequests.filter((r) => r.status === "pending").length,
+      inProgress: allRequests.filter((r) => r.status === "in-progress").length,
+      completed: allRequests.filter((r) => r.status === "completed").length,
+    };
+
+    document.getElementById("statsGrid").innerHTML = `
+        <div class="bg-surface border border-ink/10 rounded-lg p-4 md:p-6"><div class="flex items-center justify-between mb-2"><span class="text-2xl md:text-3xl">📝</span><div class="font-serif text-2xl md:text-3xl font-bold text-ink">${stats.total}</div></div><div class="text-xs md:text-sm font-medium text-ink-muted">Total Requests</div></div>
+        <div class="bg-surface border border-warning/20 bg-warning-light/30 rounded-lg p-4 md:p-6"><div class="flex items-center justify-between mb-2"><span class="text-2xl md:text-3xl">⏳</span><div class="font-serif text-2xl md:text-3xl font-bold text-ink">${stats.pending}</div></div><div class="text-xs md:text-sm font-medium text-ink-muted">Pending</div></div>
+        <div class="bg-surface border border-info/20 bg-info-light/30 rounded-lg p-4 md:p-6"><div class="flex items-center justify-between mb-2"><span class="text-2xl md:text-3xl">⚡</span><div class="font-serif text-2xl md:text-3xl font-bold text-ink">${stats.inProgress}</div></div><div class="text-xs md:text-sm font-medium text-ink-muted">In Progress</div></div>
+        <div class="bg-surface border border-success/20 bg-success-light/30 rounded-lg p-4 md:p-6"><div class="flex items-center justify-between mb-2"><span class="text-2xl md:text-3xl">✅</span><div class="font-serif text-2xl md:text-3xl font-bold text-ink">${stats.completed}</div></div><div class="text-xs md:text-sm font-medium text-ink-muted">Completed</div></div>
+    `;
+
+    document.getElementById("filterTabs").innerHTML = `
+        <button onclick="setFilter('all')" class="px-4 py-2 rounded-lg text-sm font-medium ${currentFilter === "all" ? "bg-accent text-surface" : "bg-surface border border-border text-ink-soft"}">All (${stats.total})</button>
+        <button onclick="setFilter('pending')" class="px-4 py-2 rounded-lg text-sm font-medium ${currentFilter === "pending" ? "bg-accent text-surface" : "bg-surface border border-border text-ink-soft"}">Pending (${stats.pending})</button>
+        <button onclick="setFilter('in-progress')" class="px-4 py-2 rounded-lg text-sm font-medium ${currentFilter === "in-progress" ? "bg-accent text-surface" : "bg-surface border border-border text-ink-soft"}">In Progress (${stats.inProgress})</button>
+        <button onclick="setFilter('completed')" class="px-4 py-2 rounded-lg text-sm font-medium ${currentFilter === "completed" ? "bg-accent text-surface" : "bg-surface border border-border text-ink-soft"}">Completed (${stats.completed})</button>
+    `;
+
+    renderRequests();
+  }
+
+  function setFilter(filter) {
+    currentFilter = filter;
+    renderDashboard();
+  }
+
+  function renderRequests() {
+    const filtered =
+      currentFilter === "all"
+        ? allRequests
+        : allRequests.filter((r) => r.status === currentFilter);
+    const listEl = document.getElementById("requestsList");
+
+    if (filtered.length === 0) {
+      listEl.innerHTML = `<div class="text-center py-20 bg-surface border-2 border-dashed border-border rounded-lg"><div class="text-6xl mb-6 opacity-30">📭</div><h3 class="font-serif text-2xl font-semibold text-ink mb-4">No ${currentFilter === "all" ? "" : currentFilter + " "}requests</h3><p class="text-base text-ink-soft mb-8">Submit your first request to get started!</p></div>`;
+    } else {
+      listEl.innerHTML =
+        '<div class="space-y-6">' +
+        filtered.map((r) => createRequestCard(r)).join("") +
+        "</div>";
+    }
+    lucide.createIcons();
+  }
+
+  function createRequestCard(req) {
+    const statusConfig = {
+      pending: {
+        color: "bg-warning-light text-warning border-warning/20",
+        icon: "clock",
+        label: "Pending",
+      },
+      "in-progress": {
+        color: "bg-info-light text-info border-info/20",
+        icon: "alert-circle",
+        label: "In Progress",
+      },
+      completed: {
+        color: "bg-success-light text-success border-success/20",
+        icon: "check-circle",
+        label: "Completed",
+      },
+    };
+    const status = statusConfig[req.status] || statusConfig.pending;
+    const created = new Date(req.createdAt);
+    const timeAgo = getTimeAgo(created);
+
+    return `<div class="bg-surface border border-border rounded-lg p-6 hover:border-accent hover:shadow-md transition-all"><div class="flex justify-between items-start mb-4"><h3 class="font-serif text-xl font-semibold text-ink flex-1">${req.title}</h3><span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border ${status.color}"><i data-lucide="${status.icon}" class="w-4 h-4"></i>${status.label}</span></div><p class="text-sm text-ink-soft mb-4 line-clamp-2">${req.description}</p><div class="flex flex-wrap gap-4 text-xs text-ink-muted"><span class="px-2 py-1 bg-hover rounded font-medium">${req.category}</span><span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full ${req.priority === "high" ? "bg-error" : req.priority === "medium" ? "bg-warning" : "bg-success"}"></span>${req.priority} priority</span><span>${timeAgo}</span></div>${req.articleId ? `<div class="mt-4 pt-4 border-t border-border-soft"><a href="/post/${req.articleId}" class="text-sm font-medium text-accent hover:text-accent-soft">View Published Article →</a></div>` : ""}</div>`;
+  }
+
+  function getTimeAgo(date) {
+    const seconds = Math.floor((new Date() - date) / 1000);
+    const intervals = [
+      { label: "year", seconds: 31536000 },
+      { label: "month", seconds: 2592000 },
+      { label: "day", seconds: 86400 },
+      { label: "hour", seconds: 3600 },
+      { label: "minute", seconds: 60 },
+    ];
+
+    for (const interval of intervals) {
+      const count = Math.floor(seconds / interval.seconds);
+      if (count >= 1) {
+        return `${count} ${interval.label}${count !== 1 ? "s" : ""} ago`;
+      }
+    }
+    return "just now";
+  }
+</script>
+{% endblock %}

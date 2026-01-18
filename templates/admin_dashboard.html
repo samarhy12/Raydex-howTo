@@ -1,0 +1,191 @@
+{% extends "base.html" %} {% block title %}Admin Dashboard - Raydex{% endblock
+%} {% block content %}
+<div class="min-h-screen py-12 pb-20">
+  <div class="max-w-container mx-auto px-6 md:px-8">
+    <header
+      class="flex flex-col md:flex-row md:items-start justify-between gap-6 pb-8 mb-12 border-b-2 border-border"
+    >
+      <div>
+        <h1 class="font-serif text-4xl md:text-5xl font-bold text-ink mb-2">
+          Dashboard
+        </h1>
+        <p class="text-base text-ink-soft">
+          Manage your content and monitor performance
+        </p>
+      </div>
+      <a
+        href="/admin/create"
+        class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-accent text-surface rounded-md hover:bg-accent-soft transition-all"
+        >Create New Post</a
+      >
+    </header>
+    <div
+      id="statsGrid"
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16"
+    ></div>
+    <section class="mb-16">
+      <h2 class="font-serif text-2xl font-semibold text-ink mb-6">
+        Quick Actions
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <a
+          href="/admin/create"
+          class="p-6 bg-surface border-2 border-border rounded-lg hover:border-accent transition-all group"
+          ><div class="text-3xl mb-3">✍️</div>
+          <h3 class="font-serif text-lg font-semibold text-ink mb-1">
+            Create Post
+          </h3>
+          <p class="text-sm text-ink-soft">
+            Write and publish a new article
+          </p></a
+        ><a
+          href="/admin/requests"
+          class="p-6 bg-surface border-2 border-border rounded-lg hover:border-accent transition-all group"
+          ><div class="text-3xl mb-3">📬</div>
+          <h3 class="font-serif text-lg font-semibold text-ink mb-1">
+            View Requests
+          </h3>
+          <p class="text-sm text-ink-soft">Manage question requests</p></a
+        ><button
+          onclick="location.reload()"
+          class="p-6 bg-surface border-2 border-border rounded-lg hover:border-accent transition-all group text-left"
+        >
+          <div class="text-3xl mb-3">🔄</div>
+          <h3 class="font-serif text-lg font-semibold text-ink mb-1">
+            Refresh Data
+          </h3>
+          <p class="text-sm text-ink-soft">Reload dashboard statistics</p>
+        </button>
+      </div>
+    </section>
+    <section>
+      <div
+        class="flex items-baseline justify-between pb-6 mb-8 border-b border-border-soft"
+      >
+        <h2 class="font-serif text-3xl font-semibold text-ink">All Posts</h2>
+        <span
+          id="postCount"
+          class="text-sm font-medium text-ink-muted uppercase tracking-wider"
+          >Loading...</span
+        >
+      </div>
+      <div id="postsList"></div>
+    </section>
+  </div>
+</div>
+{% endblock %} {% block extra_js %}
+<script>
+  let isLoading = false;
+
+  document.addEventListener("DOMContentLoaded", () => {
+    // Check authentication and admin role first
+    const token = localStorage.getItem("token");
+    const userStr = localStorage.getItem("user");
+
+    if (!token || !userStr) {
+      // Not authenticated
+      window.location.href = "/login";
+      return;
+    }
+
+    try {
+      const user = JSON.parse(userStr);
+      if (user.role !== "admin") {
+        // Not an admin, redirect to user dashboard
+        window.location.href = "/dashboard";
+        return;
+      }
+    } catch (e) {
+      // Invalid user data
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      window.location.href = "/login";
+      return;
+    }
+
+    // Authenticated as admin, load dashboard
+    if (!isLoading) {
+      loadDashboard();
+    }
+  });
+
+  async function loadDashboard() {
+    if (isLoading) return;
+    isLoading = true;
+
+    const token = localStorage.getItem("token");
+
+    try {
+      const [statsRes, postsRes] = await Promise.all([
+        fetch("/api/admin/dashboard", {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+        fetch("/api/posts", { headers: { Authorization: `Bearer ${token}` } }),
+      ]);
+
+      const statsData = await statsRes.json();
+      const postsData = await postsRes.json();
+
+      if (statsData.success) {
+        const s = statsData.stats;
+        document.getElementById("statsGrid").innerHTML = `
+                <div class="bg-surface border border-border rounded-lg p-6 flex items-center gap-6"><div class="text-5xl opacity-80">📝</div><div><div class="font-serif text-3xl font-bold text-ink">${s.totalPosts}</div><div class="text-sm font-medium text-ink-muted">Total Posts</div></div></div>
+                <div class="bg-surface border border-border rounded-lg p-6 flex items-center gap-6"><div class="text-5xl opacity-80">👁</div><div><div class="font-serif text-3xl font-bold text-ink">${s.totalViews.toLocaleString()}</div><div class="text-sm font-medium text-ink-muted">Total Views</div></div></div>
+                <div class="bg-surface border border-border rounded-lg p-6 flex items-center gap-6"><div class="text-5xl opacity-80">💬</div><div><div class="font-serif text-3xl font-bold text-ink">${s.totalComments}</div><div class="text-sm font-medium text-ink-muted">Total Comments</div></div></div>
+                <div class="bg-surface border border-border rounded-lg p-6 flex items-center gap-6"><div class="text-5xl opacity-80">📮</div><div><div class="font-serif text-3xl font-bold text-ink">${s.pendingRequests}<span class="text-lg text-ink-muted font-normal">/${s.totalRequests}</span></div><div class="text-sm font-medium text-ink-muted">Pending Requests</div></div></div>
+            `;
+      }
+
+      if (postsData.success) {
+        const posts = postsData.posts;
+        document.getElementById("postCount").textContent =
+          `${posts.length} articles`;
+
+        if (posts.length === 0) {
+          document.getElementById("postsList").innerHTML =
+            '<div class="text-center py-20 bg-surface border border-border rounded-lg"><div class="text-6xl mb-6 opacity-30">📄</div><h3 class="font-serif text-2xl font-semibold text-ink mb-4">No posts yet</h3><p class="text-base text-ink-soft mb-8">Create your first post to get started</p><a href="/admin/create" class="inline-flex px-6 py-3 bg-accent text-surface rounded-md">Create Post</a></div>';
+        } else {
+          document.getElementById("postsList").innerHTML =
+            '<div class="space-y-6">' +
+            posts.map((p) => createPostRow(p)).join("") +
+            "</div>";
+        }
+        lucide.createIcons();
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      showToast("Failed to load dashboard", "error");
+    } finally {
+      isLoading = false;
+    }
+  }
+
+  function createPostRow(post) {
+    const date = new Date(post.created_at).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+    return `<div class="flex flex-col md:flex-row md:items-center justify-between gap-6 p-6 bg-surface border border-border rounded-lg"><div class="flex-1"><a href="/post/${post.id}" class="font-serif text-xl font-semibold text-ink hover:text-accent block mb-2 truncate">${post.title}</a>${post.subtitle ? `<p class="text-sm text-ink-soft mb-3 truncate">${post.subtitle}</p>` : ""}<div class="flex flex-wrap gap-4 text-xs font-medium text-ink-muted"><span>${date}</span><span>${post.views} views</span></div></div><div class="flex items-center gap-3"><a href="/post/${post.id}" class="w-10 h-10 flex items-center justify-center border border-border rounded-md hover:border-info hover:text-info transition-all" title="View"><i data-lucide="eye" class="w-[18px] h-[18px]"></i></a><a href="/admin/edit/${post.id}" class="w-10 h-10 flex items-center justify-center border border-border rounded-md hover:border-accent hover:text-accent transition-all" title="Edit"><i data-lucide="edit" class="w-[18px] h-[18px]"></i></a><button onclick="deletePost(${post.id})" class="w-10 h-10 flex items-center justify-center border border-border rounded-md hover:border-error hover:text-error transition-all" title="Delete"><i data-lucide="trash-2" class="w-[18px] h-[18px]"></i></button></div></div>`;
+  }
+
+  async function deletePost(id) {
+    if (!confirm("Are you sure you want to delete this post?")) return;
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch(`/api/posts/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await response.json();
+      if (data.success) {
+        showToast("Post deleted!", "success");
+        loadDashboard();
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      showToast("Failed to delete post", "error");
+    }
+  }
+</script>
+{% endblock %}

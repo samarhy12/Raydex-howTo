@@ -1,0 +1,116 @@
+{% extends "base.html" %} {% block title %}Manage Requests - Raydex Admin{%
+endblock %} {% block content %}
+<div class="min-h-screen py-12 pb-20">
+  <div class="max-w-container mx-auto px-6 md:px-8">
+    <header class="pb-8 mb-12 border-b-2 border-border">
+      <h1 class="font-serif text-4xl md:text-5xl font-bold text-ink mb-2">
+        Manage Requests
+      </h1>
+      <p class="text-base text-ink-soft">
+        Review and manage user guide requests
+      </p>
+    </header>
+    <div id="filterTabs" class="flex flex-wrap gap-3 mb-8"></div>
+    <div id="requestsList"></div>
+  </div>
+</div>
+{% endblock %} {% block extra_js %}
+<script>
+  let allRequests = [];
+  let currentFilter = "all";
+  let isLoading = false;
+
+  document.addEventListener("DOMContentLoaded", () => {
+    if (!isLoading) {
+      loadRequests();
+    }
+  });
+
+  async function loadRequests() {
+    if (isLoading) return;
+    isLoading = true;
+
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch("/api/requests", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await response.json();
+      if (data.success) {
+        allRequests = data.requests;
+        renderRequests();
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      showToast("Failed to load requests", "error");
+    } finally {
+      isLoading = false;
+    }
+  }
+
+  function renderRequests() {
+    const stats = {
+      total: allRequests.length,
+      pending: allRequests.filter((r) => r.status === "pending").length,
+      inProgress: allRequests.filter((r) => r.status === "in-progress").length,
+      completed: allRequests.filter((r) => r.status === "completed").length,
+    };
+
+    document.getElementById("filterTabs").innerHTML = `
+        <button onclick="setFilter('all')" class="px-4 py-2 rounded-lg text-sm font-medium ${currentFilter === "all" ? "bg-accent text-surface" : "bg-surface border border-border text-ink-soft"}">All (${stats.total})</button>
+        <button onclick="setFilter('pending')" class="px-4 py-2 rounded-lg text-sm font-medium ${currentFilter === "pending" ? "bg-accent text-surface" : "bg-surface border border-border text-ink-soft"}">Pending (${stats.pending})</button>
+        <button onclick="setFilter('in-progress')" class="px-4 py-2 rounded-lg text-sm font-medium ${currentFilter === "in-progress" ? "bg-accent text-surface" : "bg-surface border border-border text-ink-soft"}">In Progress (${stats.inProgress})</button>
+        <button onclick="setFilter('completed')" class="px-4 py-2 rounded-lg text-sm font-medium ${currentFilter === "completed" ? "bg-accent text-surface" : "bg-surface border border-border text-ink-soft"}">Completed (${stats.completed})</button>
+    `;
+
+    const filtered =
+      currentFilter === "all"
+        ? allRequests
+        : allRequests.filter((r) => r.status === currentFilter);
+    const listEl = document.getElementById("requestsList");
+
+    if (filtered.length === 0) {
+      listEl.innerHTML =
+        '<div class="text-center py-20 bg-surface border border-border rounded-lg"><div class="text-6xl mb-6 opacity-30">📭</div><h3 class="font-serif text-2xl font-semibold text-ink mb-4">No requests</h3></div>';
+    } else {
+      listEl.innerHTML =
+        '<div class="space-y-6">' +
+        filtered
+          .map(
+            (r) =>
+              `<div class="bg-surface border border-border rounded-lg p-6"><div class="flex justify-between items-start mb-4"><h3 class="font-serif text-xl font-semibold text-ink flex-1">${r.title}</h3><select onchange="updateStatus(${r.id}, this.value)" class="px-3 py-1 border border-border rounded-lg text-sm"><option ${r.status === "pending" ? "selected" : ""} value="pending">Pending</option><option ${r.status === "in-progress" ? "selected" : ""} value="in-progress">In Progress</option><option ${r.status === "completed" ? "selected" : ""} value="completed">Completed</option></select></div><p class="text-sm text-ink-soft mb-4">${r.description}</p><div class="flex flex-wrap gap-4 text-xs text-ink-muted"><span class="px-2 py-1 bg-hover rounded">${r.category}</span><span>${r.priority} priority</span><span>By ${r.userName}</span></div></div>`,
+          )
+          .join("") +
+        "</div>";
+    }
+    lucide.createIcons();
+  }
+
+  function setFilter(filter) {
+    currentFilter = filter;
+    renderRequests();
+  }
+
+  async function updateStatus(id, status) {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch(`/api/requests/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ status }),
+      });
+      const data = await response.json();
+      if (data.success) {
+        showToast("Status updated!", "success");
+        loadRequests();
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      showToast("Failed to update status", "error");
+    }
+  }
+</script>
+{% endblock %}

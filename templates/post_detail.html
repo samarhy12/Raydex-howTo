@@ -1,0 +1,365 @@
+{% extends "base.html" %} {% block title %}{{ post.title }} - Complete Guide |
+Raydex HowTO{% endblock %} {% block meta_title %}{{ post.title }} - Step-by-Step
+Tutorial | Raydex HowTO{% endblock %} {% block meta_description %}{{
+post.subtitle[:155] if post.subtitle else 'Learn ' + post.title.lower() + ' with
+our comprehensive step-by-step guide. Complete tutorial with examples, best
+practices, and expert tips from Raydex HowTO.' }}{% endblock %} {% block
+meta_keywords %}{{ post.title|lower }}, how to {{ post.title|lower }}, {{
+post.title|lower }} tutorial, {{ post.title|lower }} guide, learn {{
+post.title|lower }}, tech tutorial, programming guide, raydex howto{% endblock
+%} {% block canonical %}https://howto.raydexhub.com/post/{{ post.id }}{%
+endblock %} {% block og_type %}article{% endblock %} {% block og_title %}{{
+post.title }} - Complete Tutorial{% endblock %} {% block og_description %}{{
+post.subtitle[:200] if post.subtitle else 'Learn ' + post.title + ' with our
+comprehensive step-by-step guide from Raydex HowTO' }}{% endblock %} {% block
+og_image %}{% set found_image = namespace(value='') %}{% for block in
+post.get_content() %}{% if block.type == 'image' and not found_image.value %}{%
+set found_image.value = 'https://howto.raydexhub.com/static/uploads/' +
+block.data %}{% endif %}{% endfor %}{{ found_image.value if found_image.value
+else 'https://howto.raydexhub.com/static/img/og-default.png' }}{% endblock %} {%
+block twitter_title %}{{ post.title }} - Tutorial Guide{% endblock %} {% block
+twitter_description %}{{ post.subtitle[:200] if post.subtitle else 'Complete
+guide: ' + post.title }}{% endblock %} {% block twitter_image %}{% set
+found_image = namespace(value='') %}{% for block in post.get_content() %}{% if
+block.type == 'image' and not found_image.value %}{% set found_image.value =
+'https://howto.raydexhub.com/static/uploads/' + block.data %}{% endif %}{%
+endfor %}{{ found_image.value if found_image.value else
+'https://howto.raydexhub.com/static/img/og-default.png' }}{% endblock %} {%
+block extra_schema %}
+<!-- Article Schema -->
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "{{ post.title }}",
+    "description": "{{ post.subtitle if post.subtitle else 'Learn how to ' + post.title.lower() }}",
+    "image": "{% set found_image = namespace(value='') %}{% for block in post.get_content() %}{% if block.type == 'image' and not found_image.value %}{% set found_image.value = 'https://howto.raydexhub.com/static/uploads/' + block.data %}{% endif %}{% endfor %}{{ found_image.value if found_image.value else 'https://howto.raydexhub.com/static/img/default-article.png' }}",
+    "author": {
+      "@type": "Person",
+      "name": "Raydex Hub Team",
+      "url": "https://raydexhub.com"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Raydex Hub",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://howto.raydexhub.com/static/img/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "datePublished": "{{ post.created_at.isoformat() }}",
+    "dateModified": "{{ post.updated_at.isoformat() }}",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://howto.raydexhub.com/post/{{ post.id }}"
+    },
+    "articleSection": "Technology",
+    "inLanguage": "en-US",
+    "isAccessibleForFree": true,
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "Raydex HowTO",
+      "url": "https://howto.raydexhub.com"
+    }
+  }
+</script>
+
+<!-- HowTo Schema for Tutorial Articles -->
+<script type="application/ld+json">
+  {
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      "name": "{{ post.title }}",
+      "description": "{{ post.subtitle if post.subtitle else 'Step-by-step guide on how to ' + post.title.lower() }}",
+      "image": {
+          "@type": "ImageObject",
+          "url": "{% set found_image = namespace(value='') %}{% for block in post.get_content() %}{% if block.type == 'image' and not found_image.value %}{% set found_image.value = 'https://howto.raydexhub.com/static/uploads/' + block.data %}{% endif %}{% endfor %}{{ found_image.value if found_image.value else 'https://howto.raydexhub.com/static/img/default-article.png' }}"
+      },
+      "totalTime": "PT15M",
+      "estimatedCost": {
+          "@type": "MonetaryAmount",
+          "currency": "USD",
+          "value": "0"
+      },
+      "tool": [],
+      "supply": [],
+      "step": [
+          {% for block in post.get_content() %}
+          {% if block.type == 'text' and block.data|length > 50 %}
+          {
+              "@type": "HowToStep",
+              "name": "Step {{ loop.index }}",
+              "text": "{{ block.data[:200]|replace('"', '\\"')|replace('\n', ' ') }}...",
+              "url": "https://howto.raydexhub.com/post/{{ post.id }}#step-{{ loop.index }}"
+          }{% if not loop.last %},{% endif %}
+          {% endif %}
+          {% endfor %}
+      ]
+  }
+</script>
+
+<!-- Breadcrumb Schema -->
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://howto.raydexhub.com"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "{{ post.title }}",
+        "item": "https://howto.raydexhub.com/post/{{ post.id }}"
+      }
+    ]
+  }
+</script>
+{% endblock %} {% block content %}
+<article class="min-h-screen py-12 pb-20">
+  <div class="max-w-4xl mx-auto px-6 md:px-8">
+    <!-- Back Button -->
+    <a
+      href="/"
+      class="inline-flex items-center gap-2 text-sm font-medium text-ink-soft hover:text-accent transition-colors mb-8"
+    >
+      <i data-lucide="arrow-left" class="w-4 h-4"></i>
+      Back to articles
+    </a>
+
+    <!-- Article Header -->
+    <header class="mb-12 pb-8 border-b-2 border-border">
+      <h1
+        class="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-ink mb-6 leading-tight"
+      >
+        {{ post.title }}
+      </h1>
+
+      {% if post.subtitle %}
+      <p class="text-xl text-ink-soft leading-relaxed mb-6">
+        {{ post.subtitle }}
+      </p>
+      {% endif %}
+
+      <div class="flex flex-wrap items-center gap-4 text-sm text-ink-muted">
+        <div class="flex items-center gap-2">
+          <div
+            class="w-10 h-10 rounded-full bg-gradient-to-br from-accent to-accent-soft flex items-center justify-center font-serif text-sm font-semibold text-surface"
+          >
+            {{ post.author[0].upper() }}
+          </div>
+          <span class="font-medium text-ink">{{ post.author }}</span>
+        </div>
+        <span class="opacity-50">•</span>
+        <time>{{ post.created_at.strftime('%B %d, %Y') }}</time>
+        <span class="opacity-50">•</span>
+        <span class="flex items-center gap-1">
+          <i data-lucide="eye" class="w-4 h-4"></i>
+          {{ post.views }} views
+        </span>
+      </div>
+    </header>
+
+    <!-- Article Content -->
+    <div class="prose prose-lg max-w-none">
+      {% for block in post.get_content() %} {% if block.type == 'text' %}
+      <div
+        class="mb-8 text-base leading-relaxed text-ink-soft whitespace-pre-wrap"
+      >
+        {{ block.data }}
+      </div>
+      {% elif block.type == 'image' %}
+      <figure class="my-12">
+        <img
+          src="/static/uploads/{{ block.data }}"
+          alt="{{ block.caption or post.title }}"
+          class="w-full rounded-xl shadow-lg"
+        />
+        {% if block.caption %}
+        <figcaption class="mt-4 text-sm text-center text-ink-muted italic">
+          {{ block.caption }}
+        </figcaption>
+        {% endif %}
+      </figure>
+      {% endif %} {% endfor %}
+    </div>
+
+    <!-- Comments Section -->
+    <section class="mt-20 pt-12 border-t-2 border-border">
+      <h2 class="font-serif text-3xl font-bold text-ink mb-8">Comments</h2>
+
+      <!-- Comment Form -->
+      <div class="bg-surface border border-border rounded-xl p-6 mb-12">
+        <h3 class="font-serif text-xl font-semibold text-ink mb-6">
+          Leave a Comment
+        </h3>
+        <form id="commentForm" class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label for="name" class="block text-sm font-medium text-ink mb-2"
+                >Name</label
+              >
+              <input
+                type="text"
+                id="name"
+                required
+                class="w-full px-4 py-3 border border-border rounded-lg bg-surface text-ink placeholder-ink-muted transition-all duration-fast focus:outline-none focus:border-accent focus:ring-4 focus:ring-accent-light"
+                placeholder="Your name"
+              />
+            </div>
+            <div>
+              <label for="email" class="block text-sm font-medium text-ink mb-2"
+                >Email</label
+              >
+              <input
+                type="email"
+                id="email"
+                required
+                class="w-full px-4 py-3 border border-border rounded-lg bg-surface text-ink placeholder-ink-muted transition-all duration-fast focus:outline-none focus:border-accent focus:ring-4 focus:ring-accent-light"
+                placeholder="your@email.com"
+              />
+            </div>
+          </div>
+          <div>
+            <label for="comment" class="block text-sm font-medium text-ink mb-2"
+              >Comment</label
+            >
+            <textarea
+              id="comment"
+              required
+              rows="4"
+              class="w-full px-4 py-3 border border-border rounded-lg bg-surface text-ink placeholder-ink-muted transition-all duration-fast focus:outline-none focus:border-accent focus:ring-4 focus:ring-accent-light resize-none"
+              placeholder="Share your thoughts..."
+            ></textarea>
+          </div>
+          <button
+            type="submit"
+            id="submitBtn"
+            class="px-6 py-3 bg-accent text-surface rounded-lg font-medium transition-all duration-base hover:bg-accent-soft hover:-translate-y-0.5 hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <span id="submitText">Post Comment</span>
+            <span id="loadingText" class="hidden">Posting...</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- Comments List -->
+      <div id="commentsList" class="space-y-6">
+        <div class="text-center py-8">
+          <div
+            class="w-12 h-12 border-3 border-border border-t-accent rounded-full animate-spin-slow mx-auto"
+          ></div>
+        </div>
+      </div>
+    </section>
+  </div>
+</article>
+{% endblock %} {% block extra_js %}
+<script>
+  const postId = {{ post.id }};
+
+  // Load comments
+  document.addEventListener('DOMContentLoaded', loadComments);
+
+  async function loadComments() {
+      try {
+          const response = await fetch(`/api/posts/${postId}/comments`);
+          const data = await response.json();
+
+          const commentsList = document.getElementById('commentsList');
+
+          if (data.success && data.comments.length > 0) {
+              commentsList.innerHTML = data.comments.map(comment => createCommentHTML(comment)).join('');
+              lucide.createIcons();
+          } else {
+              commentsList.innerHTML = `
+                  <div class="text-center py-12 text-ink-muted">
+                      <i data-lucide="message-square" class="w-12 h-12 mx-auto mb-4 opacity-30"></i>
+                      <p>No comments yet. Be the first to share your thoughts!</p>
+                  </div>
+              `;
+              lucide.createIcons();
+          }
+      } catch (error) {
+          console.error('Error loading comments:', error);
+      }
+  }
+
+  function createCommentHTML(comment) {
+      const date = new Date(comment.created_at);
+      const formattedDate = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+      return `
+          <div class="bg-surface border border-border rounded-lg p-6">
+              <div class="flex items-start gap-4">
+                  <div class="w-12 h-12 rounded-full bg-gradient-to-br from-accent-light to-accent-light/30 flex items-center justify-center font-serif text-lg font-semibold text-accent">
+                      ${comment.name.charAt(0).toUpperCase()}
+                  </div>
+                  <div class="flex-1">
+                      <div class="flex items-baseline gap-3 mb-2">
+                          <h4 class="font-medium text-ink">${comment.name}</h4>
+                          <time class="text-xs text-ink-muted">${formattedDate}</time>
+                      </div>
+                      <p class="text-sm text-ink-soft leading-relaxed">${comment.comment}</p>
+                  </div>
+              </div>
+          </div>
+      `;
+  }
+
+  // Handle comment submission
+  document.getElementById('commentForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const submitBtn = document.getElementById('submitBtn');
+      const submitText = document.getElementById('submitText');
+      const loadingText = document.getElementById('loadingText');
+
+      const formData = new FormData();
+      formData.append('name', document.getElementById('name').value);
+      formData.append('email', document.getElementById('email').value);
+      formData.append('comment', document.getElementById('comment').value);
+
+      submitBtn.disabled = true;
+      submitText.classList.add('hidden');
+      loadingText.classList.remove('hidden');
+
+      try {
+          const token = localStorage.getItem('token');
+          const headers = {};
+          if (token) {
+              headers['Authorization'] = `Bearer ${token}`;
+          }
+
+          const response = await fetch(`/api/posts/${postId}/comments`, {
+              method: 'POST',
+              headers: headers,
+              body: formData
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+              showToast('Comment posted successfully!', 'success');
+              document.getElementById('commentForm').reset();
+              loadComments();
+          } else {
+              showToast(data.error || 'Failed to post comment', 'error');
+          }
+      } catch (error) {
+          console.error('Error posting comment:', error);
+          showToast('An error occurred. Please try again.', 'error');
+      } finally {
+          submitBtn.disabled = false;
+          submitText.classList.remove('hidden');
+          loadingText.classList.add('hidden');
+      }
+  });
+</script>
+{% endblock %}

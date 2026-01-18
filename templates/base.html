@@ -1,0 +1,810 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Primary Meta Tags -->
+    <title>
+      {% block title %}Raydex HowTO - Tech Tutorials & Developer Guides |
+      RaydexHub{% endblock %}
+    </title>
+    <meta
+      name="title"
+      content="{% block meta_title %}Raydex HowTO - Tech Tutorials & Developer Guides | RaydexHub{% endblock %}"
+    />
+    <meta
+      name="description"
+      content="{% block meta_description %}Learn programming, web development, and tech skills with comprehensive how-to guides and tutorials. Part of the Raydex Hub ecosystem of online tech tools.{% endblock %}"
+    />
+    <meta
+      name="keywords"
+      content="{% block meta_keywords %}programming tutorials, web development guides, coding how-to, tech tutorials, developer resources, learn programming, Raydex Hub, RaydexHub, Raydex, Agyarey Raphael, Agyarey Raphael Yeboah Wadie, Raydex HowTO{% endblock %}"
+    />
+    <meta name="author" content="Agyarey Raphael Yeboah Wadie" />
+    <meta
+      name="robots"
+      content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+    />
+
+    <!-- Canonical URL -->
+    <link
+      rel="canonical"
+      href="{% block canonical %}https://howto.raydexhub.com{{ request.path }}{% endblock %}"
+    />
+
+    <!-- Open Graph / Facebook -->
+    <meta
+      property="og:type"
+      content="{% block og_type %}website{% endblock %}"
+    />
+    <meta
+      property="og:url"
+      content="https://howto.raydexhub.com{{ request.path }}"
+    />
+    <meta
+      property="og:title"
+      content="{% block og_title %}Raydex HowTO - Tech Tutorials & Developer Guides{% endblock %}"
+    />
+    <meta
+      property="og:description"
+      content="{% block og_description %}Learn programming, web development, and tech skills with comprehensive how-to guides and tutorials from Raydex Hub.{% endblock %}"
+    />
+    <meta
+      property="og:image"
+      content="{% block og_image %}https://howto.raydexhub.com/static/img/og-image.png{% endblock %}"
+    />
+    <meta property="og:site_name" content="Raydex HowTO" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:url"
+      content="https://howto.raydexhub.com{{ request.path }}"
+    />
+    <meta
+      name="twitter:title"
+      content="{% block twitter_title %}Raydex HowTO - Tech Tutorials & Developer Guides{% endblock %}"
+    />
+    <meta
+      name="twitter:description"
+      content="{% block twitter_description %}Learn programming, web development, and tech skills with comprehensive how-to guides and tutorials from Raydex Hub.{% endblock %}"
+    />
+    <meta
+      name="twitter:image"
+      content="{% block twitter_image %}https://howto.raydexhub.com/static/img/og-image.png{% endblock %}"
+    />
+    <meta name="twitter:creator" content="@RaydexHub" />
+
+    <!-- Additional SEO -->
+    <meta name="language" content="English" />
+    <meta name="revisit-after" content="7 days" />
+    <meta name="rating" content="General" />
+    <meta name="distribution" content="global" />
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/static/img/favicon.ico" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/static/img/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/static/img/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/static/img/favicon-16x16.png"
+    />
+
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Raydex HowTO",
+        "alternateName": "Raydex Hub HowTO",
+        "url": "https://howto.raydexhub.com",
+        "description": "Tech tutorials, quick guides, and developer resources for learners at every level",
+        "publisher": {
+          "@type": "Organization",
+          "name": "Raydex Hub",
+          "url": "https://raydexhub.com",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://howto.raydexhub.com/static/img/logo.png"
+          },
+          "sameAs": [
+            "https://github.com/raydexhub",
+            "https://twitter.com/raydexhub"
+          ]
+        },
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://howto.raydexhub.com/?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      }
+    </script>
+
+    <!-- Organization Schema -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Raydex Hub",
+        "url": "https://raydexhub.com",
+        "logo": "https://raydexhub.com/img/logo.png",
+        "description": "A community of online tech tools including background remover, translator, PDF tools, and educational platforms",
+        "founder": {
+          "@type": "Person",
+          "name": "Agyarey Raphael Yeboah Wadie"
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "Customer Support",
+          "email": "support@raydexhub.com"
+        }
+      }
+    </script>
+
+    {% block extra_schema %}{% endblock %}
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts - Crimson Pro & Work Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600;700&family=Work+Sans:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              // Surfaces
+              surface: "#FFFFFF",
+              paper: "#FAF9F6",
+              hover: "#F5F4F1",
+
+              // Borders
+              border: "#E5E3DC",
+              "border-soft": "#F0EFE9",
+
+              // Text
+              ink: "#1A1917",
+              "ink-soft": "#4A4845",
+              "ink-muted": "#8B8985",
+
+              // Accent (Earthy green-blue)
+              accent: "#2C5F2D",
+              "accent-soft": "#234D24",
+              "accent-dark": "#1A3A1B",
+              "accent-light": "#E8F3E8",
+
+              // Status colors
+              success: "#2C5F2D",
+              "success-light": "#E8F3E8",
+              error: "#8B2C2C",
+              "error-light": "#F8E8E8",
+              warning: "#8B6914",
+              "warning-light": "#F8F3E3",
+              info: "#2C4F5F",
+              "info-light": "#E8EFF3",
+            },
+            fontFamily: {
+              serif: ["Crimson Pro", "serif"],
+              sans: ["Work Sans", "sans-serif"],
+            },
+            maxWidth: {
+              container: "1280px",
+            },
+            transitionDuration: {
+              fast: "150ms",
+              base: "200ms",
+              slow: "300ms",
+            },
+            animation: {
+              "fade-in": "fadeIn 0.5s ease-out forwards",
+              shimmer: "shimmer 2s infinite",
+              "spin-slow": "spin 2s linear infinite",
+              "bounce-subtle": "bounceSubtle 0.6s ease-in-out",
+            },
+            keyframes: {
+              fadeIn: {
+                "0%": { opacity: "0", transform: "translateY(10px)" },
+                "100%": { opacity: "1", transform: "translateY(0)" },
+              },
+              shimmer: {
+                "0%": { backgroundPosition: "200% 0" },
+                "100%": { backgroundPosition: "-200% 0" },
+              },
+              bounceSubtle: {
+                "0%, 100%": { transform: "translateY(0)" },
+                "50%": { transform: "translateY(-4px)" },
+              },
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      /* Base styles */
+      html {
+        font-size: 16px;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: "Work Sans", sans-serif;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-family: "Crimson Pro", serif;
+        font-weight: 600;
+        color: #1a1917;
+      }
+
+      h1 {
+        font-size: 2.25rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+
+      h2 {
+        font-size: 1.875rem;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+      }
+
+      h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+      }
+
+      h4 {
+        font-size: 1.25rem;
+        font-weight: 600;
+      }
+
+      /* Glass effect */
+      .glass {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(229, 227, 220, 0.5);
+      }
+
+      /* Gradient text */
+      .text-gradient {
+        background: linear-gradient(135deg, #2c5f2d 0%, #1a3a1b 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      /* Stagger animations */
+      .stagger-1 {
+        animation-delay: 100ms;
+      }
+      .stagger-2 {
+        animation-delay: 200ms;
+      }
+      .stagger-3 {
+        animation-delay: 300ms;
+      }
+      .stagger-4 {
+        animation-delay: 400ms;
+      }
+      .stagger-5 {
+        animation-delay: 500ms;
+      }
+
+      /* Line clamp utilities */
+      .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .line-clamp-3 {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 12px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #faf9f6;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #e5e3dc;
+        border-radius: 6px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: #8b8985;
+      }
+
+      /* Drop cap for post content */
+      .content-text:first-of-type::first-letter {
+        color: #2c5f2d;
+        font-weight: 600;
+        float: left;
+        margin-right: 0.5rem;
+        margin-top: 0.25rem;
+        font-size: 2.5em;
+        line-height: 0.9;
+      }
+    </style>
+
+    {% block extra_css %}{% endblock %}
+  </head>
+  <body class="font-sans bg-paper text-ink antialiased">
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 glass border-b border-border">
+      <div class="max-w-container mx-auto px-6 md:px-8 py-4 md:py-6">
+        <div class="flex items-center justify-between">
+          <!-- Logo -->
+          <a
+            href="/"
+            class="flex items-center gap-4 group transition-transform duration-base hover:translate-x-0.5"
+          >
+            <span
+              class="text-xl text-accent leading-none group-hover:animate-bounce-subtle"
+              >◆</span
+            >
+            <div class="flex flex-col gap-0.5">
+              <span
+                class="font-serif text-lg font-semibold text-ink leading-none tracking-tight"
+                >Raydex</span
+              >
+              <span
+                class="font-sans text-xs font-medium text-ink-muted uppercase tracking-widest leading-none hidden sm:block"
+                >How-To</span
+              >
+            </div>
+          </a>
+
+          <!-- Desktop Navigation -->
+          <div class="hidden md:flex items-center gap-6">
+            <div id="navLinks" class="flex items-center gap-6"></div>
+            <div id="authButtons"></div>
+          </div>
+
+          <!-- Mobile Menu Button -->
+          <button
+            id="mobileMenuButton"
+            class="md:hidden flex items-center justify-center w-10 h-10 rounded-md hover:bg-hover transition-colors"
+          >
+            <i data-lucide="menu" class="w-6 h-6 text-ink"></i>
+          </button>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div
+          id="mobileMenu"
+          class="hidden md:hidden mt-4 pb-4 border-t border-border-soft pt-4 animate-fade-in"
+        >
+          <div id="mobileNavLinks" class="flex flex-col gap-2"></div>
+          <div
+            id="mobileAuthButtons"
+            class="mt-4 pt-4 border-t border-border-soft"
+          ></div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>{% block content %}{% endblock %}</main>
+
+    <!-- Footer -->
+    <footer class="mt-auto py-12 border-t border-border bg-surface">
+      <div class="max-w-container mx-auto px-6 md:px-8">
+        <div
+          class="flex flex-col md:flex-row items-center justify-between gap-6"
+        >
+          <div class="flex items-center gap-4">
+            <span class="text-lg text-accent opacity-70">◆</span>
+            <div class="flex flex-col gap-1">
+              <span class="font-serif text-base font-semibold text-ink"
+                >Raydex How-To</span
+              >
+              <span class="font-sans text-xs text-ink-muted italic"
+                >Knowledge worth sharing</span
+              >
+            </div>
+          </div>
+          <div class="text-xs text-ink-muted">
+            © 2024 Agyarey Raphael. All rights reserved.
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="fixed top-4 right-4 z-50 space-y-2"></div>
+
+    <script>
+      // Global state - prevent infinite loops
+      let isInitialized = false;
+      let currentUser = null;
+      let currentPath = window.location.pathname;
+
+      // Initialize on page load only once
+      document.addEventListener("DOMContentLoaded", initializeApp);
+
+      function initializeApp() {
+        if (isInitialized) return;
+        isInitialized = true;
+
+        loadAuthState();
+        renderNavigation();
+        lucide.createIcons();
+      }
+
+      function loadAuthState() {
+        const token = localStorage.getItem("token");
+        const userStr = localStorage.getItem("user");
+
+        if (token && userStr) {
+          try {
+            currentUser = JSON.parse(userStr);
+          } catch (e) {
+            currentUser = null;
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+          }
+        }
+      }
+
+      function renderNavigation() {
+        const navLinks = document.getElementById("navLinks");
+        const authButtons = document.getElementById("authButtons");
+        const mobileNavLinks = document.getElementById("mobileNavLinks");
+        const mobileAuthButtons = document.getElementById("mobileAuthButtons");
+
+        const isAdminRoute = currentPath.startsWith("/admin");
+
+        let desktopLinks = "";
+        let mobileLinks = "";
+
+        if (isAdminRoute && currentUser?.role === "admin") {
+          // Admin navigation
+          desktopLinks = `
+                    <a href="/admin/dashboard" class="relative font-sans text-sm font-medium px-3 py-2 rounded-sm transition-all duration-fast ${currentPath === "/admin/dashboard" ? "text-accent" : "text-ink-soft hover:text-ink hover:bg-hover"}">
+                        Dashboard
+                        ${currentPath === "/admin/dashboard" ? '<span class="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-accent rounded-full"></span>' : ""}
+                    </a>
+                    <a href="/admin/requests" class="relative font-sans text-sm font-medium px-3 py-2 rounded-sm transition-all duration-fast ${currentPath === "/admin/requests" ? "text-accent" : "text-ink-soft hover:text-ink hover:bg-hover"}">
+                        Requests
+                        ${currentPath === "/admin/requests" ? '<span class="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-accent rounded-full"></span>' : ""}
+                    </a>
+                    <a href="/" class="font-sans text-sm font-medium text-accent px-4 py-2 border border-border rounded-md transition-all duration-base hover:bg-accent hover:text-surface hover:border-accent hover:-translate-y-0.5">
+                        ← View Site
+                    </a>
+                `;
+
+          mobileLinks = `
+                    <a href="/admin/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-md text-sm font-medium ${currentPath === "/admin/dashboard" ? "bg-accent-light text-accent" : "text-ink-soft hover:bg-hover hover:text-ink"} transition-colors">
+                        <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+                        Dashboard
+                    </a>
+                    <a href="/admin/requests" class="flex items-center gap-3 px-4 py-3 rounded-md text-sm font-medium ${currentPath === "/admin/requests" ? "bg-accent-light text-accent" : "text-ink-soft hover:bg-hover hover:text-ink"} transition-colors">
+                        <i data-lucide="inbox" class="w-4 h-4"></i>
+                        Requests
+                    </a>
+                    <a href="/" class="flex items-center gap-3 px-4 py-3 rounded-md text-sm font-medium text-accent hover:bg-accent-light transition-colors">
+                        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                        View Site
+                    </a>
+                `;
+        } else {
+          // Public navigation
+          desktopLinks = `
+                    <a href="/" class="relative font-sans text-sm font-medium px-3 py-2 rounded-sm transition-all duration-fast ${currentPath === "/" ? "text-accent" : "text-ink-soft hover:text-ink hover:bg-hover"}">
+                        Articles
+                        ${currentPath === "/" ? '<span class="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-accent rounded-full"></span>' : ""}
+                    </a>
+                    ${
+                      currentUser
+                        ? `
+                        <a href="/dashboard" class="relative font-sans text-sm font-medium px-3 py-2 rounded-sm transition-all duration-fast ${currentPath === "/dashboard" ? "text-accent" : "text-ink-soft hover:text-ink hover:bg-hover"}">
+                            My Requests
+                            ${currentPath === "/dashboard" ? '<span class="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-accent rounded-full"></span>' : ""}
+                        </a>
+                    `
+                        : ""
+                    }
+                `;
+
+          mobileLinks = `
+                    <a href="/" class="flex items-center gap-3 px-4 py-3 rounded-md text-sm font-medium ${currentPath === "/" ? "bg-accent-light text-accent" : "text-ink-soft hover:bg-hover hover:text-ink"} transition-colors">
+                        <i data-lucide="book-open" class="w-4 h-4"></i>
+                        Articles
+                    </a>
+                    ${
+                      currentUser
+                        ? `
+                        <a href="/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-md text-sm font-medium ${currentPath === "/dashboard" ? "bg-accent-light text-accent" : "text-ink-soft hover:bg-hover hover:text-ink"} transition-colors">
+                            <i data-lucide="file-text" class="w-4 h-4"></i>
+                            My Requests
+                        </a>
+                        <a href="/request" class="flex items-center gap-3 px-4 py-3 rounded-md text-sm font-medium ${currentPath === "/request" ? "bg-accent-light text-accent" : "text-ink-soft hover:bg-hover hover:text-ink"} transition-colors">
+                            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                            Request Guide
+                        </a>
+                        <a href="/profile" class="flex items-center gap-3 px-4 py-3 rounded-md text-sm font-medium ${currentPath === "/profile" ? "bg-accent-light text-accent" : "text-ink-soft hover:bg-hover hover:text-ink"} transition-colors">
+                            <i data-lucide="settings" class="w-4 h-4"></i>
+                            Settings
+                        </a>
+                    `
+                        : ""
+                    }
+                `;
+        }
+
+        navLinks.innerHTML = desktopLinks;
+        mobileNavLinks.innerHTML = mobileLinks;
+        authButtons.innerHTML = currentUser
+          ? renderUserMenu()
+          : renderAuthButtons();
+        mobileAuthButtons.innerHTML = currentUser
+          ? renderMobileUserSection()
+          : renderMobileAuthButtons();
+
+        lucide.createIcons();
+        setupUserMenu();
+        setupMobileMenu();
+      }
+
+      function renderUserMenu(isMobile = false) {
+        const user = currentUser;
+        return `
+                <div class="relative" id="userMenuContainer">
+                    <button id="userMenuButton" class="flex items-center gap-2 px-3 py-2 rounded-md transition-all duration-base hover:bg-hover">
+                        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-accent to-accent-soft flex items-center justify-center font-serif text-sm font-semibold text-surface">
+                            ${user?.name?.charAt(0).toUpperCase() || "U"}
+                        </div>
+                        <span class="${isMobile ? "inline" : "hidden md:inline"} font-sans text-sm font-medium text-ink">
+                            ${user?.name || "User"}
+                        </span>
+                    </button>
+                    
+                    <div id="userMenuDropdown" class="hidden absolute right-0 mt-2 w-56 glass rounded-lg shadow-xl py-2 animate-fade-in">
+                        <div class="px-4 py-3 border-b border-border-soft">
+                            <p class="text-sm font-semibold text-ink">${user?.name || "User"}</p>
+                            <p class="text-xs text-ink-muted truncate">${user?.email || ""}</p>
+                            ${user?.role === "admin" ? '<span class="inline-block mt-1 px-2 py-0.5 text-xs font-medium bg-accent-light text-accent rounded">Admin</span>' : ""}
+                        </div>
+                        
+                        <div class="py-2">
+                            ${
+                              !currentPath.startsWith("/admin")
+                                ? `
+                                <a href="/dashboard" class="flex items-center gap-3 px-4 py-2 text-sm text-ink-soft hover:text-ink hover:bg-hover transition-colors">
+                                    <i data-lucide="file-text" class="w-4 h-4"></i>
+                                    My Requests
+                                </a>
+                            `
+                                : ""
+                            }
+                            <a href="/profile" class="flex items-center gap-3 px-4 py-2 text-sm text-ink-soft hover:text-ink hover:bg-hover transition-colors">
+                                <i data-lucide="settings" class="w-4 h-4"></i>
+                                Settings
+                            </a>
+                            ${
+                              user?.role === "admin" &&
+                              !currentPath.startsWith("/admin")
+                                ? `
+                                <a href="/admin/dashboard" class="flex items-center gap-3 px-4 py-2 text-sm text-accent hover:bg-accent-light transition-colors">
+                                    <i data-lucide="user" class="w-4 h-4"></i>
+                                    Admin Panel
+                                </a>
+                            `
+                                : ""
+                            }
+                        </div>
+                        
+                        <div class="border-t border-border-soft pt-2">
+                            <button onclick="handleLogout()" class="flex items-center gap-3 px-4 py-2 w-full text-sm text-error hover:bg-error-light transition-colors">
+                                <i data-lucide="log-out" class="w-4 h-4"></i>
+                                Logout
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+      }
+
+      function renderMobileUserSection() {
+        const user = currentUser;
+        return `
+                <div class="flex items-center gap-3 px-4 py-3 bg-hover rounded-md">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-accent to-accent-soft flex items-center justify-center font-serif text-sm font-semibold text-surface">
+                        ${user?.name?.charAt(0).toUpperCase() || "U"}
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-sm font-semibold text-ink">${user?.name || "User"}</p>
+                        <p class="text-xs text-ink-muted truncate">${user?.email || ""}</p>
+                    </div>
+                </div>
+                ${
+                  user?.role === "admin" && !currentPath.startsWith("/admin")
+                    ? `
+                    <a href="/admin/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-md text-sm font-medium text-accent hover:bg-accent-light transition-colors mt-2">
+                        <i data-lucide="shield" class="w-4 h-4"></i>
+                        Admin Panel
+                    </a>
+                `
+                    : ""
+                }
+                <button onclick="handleLogout()" class="flex items-center gap-3 px-4 py-3 rounded-md text-sm font-medium text-error hover:bg-error-light transition-colors w-full mt-2">
+                    <i data-lucide="log-out" class="w-4 h-4"></i>
+                    Logout
+                </button>
+            `;
+      }
+
+      function renderMobileAuthButtons() {
+        return `
+                <a href="/login" class="flex items-center justify-center gap-2 w-full px-4 py-3 bg-surface border border-border rounded-md text-sm font-medium text-ink-soft hover:text-ink hover:bg-hover transition-colors">
+                    <i data-lucide="log-in" class="w-4 h-4"></i>
+                    Login
+                </a>
+                <a href="/register" class="flex items-center justify-center gap-2 w-full px-4 py-3 bg-accent text-surface rounded-md text-sm font-medium hover:bg-accent-soft transition-colors mt-2">
+                    <i data-lucide="user-plus" class="w-4 h-4"></i>
+                    Sign Up
+                </a>
+            `;
+      }
+
+      function setupMobileMenu() {
+        const mobileMenuButton = document.getElementById("mobileMenuButton");
+        const mobileMenu = document.getElementById("mobileMenu");
+
+        if (mobileMenuButton && mobileMenu) {
+          mobileMenuButton.addEventListener("click", (e) => {
+            e.stopPropagation();
+            mobileMenu.classList.toggle("hidden");
+
+            // Toggle icon
+            const icon = mobileMenuButton.querySelector("i");
+            if (mobileMenu.classList.contains("hidden")) {
+              icon.setAttribute("data-lucide", "menu");
+            } else {
+              icon.setAttribute("data-lucide", "x");
+            }
+            lucide.createIcons();
+          });
+
+          // Close menu when clicking outside
+          document.addEventListener("click", (e) => {
+            if (!e.target.closest("nav")) {
+              mobileMenu.classList.add("hidden");
+              const icon = mobileMenuButton.querySelector("i");
+              icon.setAttribute("data-lucide", "menu");
+              lucide.createIcons();
+            }
+          });
+
+          // Close menu when clicking a link
+          mobileMenu.addEventListener("click", (e) => {
+            if (e.target.tagName === "A") {
+              mobileMenu.classList.add("hidden");
+              const icon = mobileMenuButton.querySelector("i");
+              icon.setAttribute("data-lucide", "menu");
+              lucide.createIcons();
+            }
+          });
+        }
+      }
+
+      function renderAuthButtons(isMobile = false) {
+        return `
+                <div class="flex items-center gap-3">
+                    <a href="/login" class="flex items-center gap-2 font-sans text-sm font-medium text-ink-soft px-4 py-2 rounded-md transition-all duration-base hover:text-ink hover:bg-hover">
+                        <i data-lucide="log-in" class="w-4 h-4"></i>
+                        <span class="${isMobile ? "inline" : "hidden md:inline"}">Login</span>
+                    </a>
+                    <a href="/register" class="flex items-center gap-2 font-sans text-sm font-medium text-surface px-4 py-2 bg-accent rounded-md transition-all duration-base hover:bg-accent-soft hover:-translate-y-0.5 hover:shadow-md">
+                        <i data-lucide="user-plus" class="w-4 h-4"></i>
+                        <span class="${isMobile ? "inline" : "hidden md:inline"}">Sign Up</span>
+                    </a>
+                </div>
+            `;
+      }
+
+      function setupUserMenu() {
+        const userMenuButton = document.getElementById("userMenuButton");
+        const userMenuDropdown = document.getElementById("userMenuDropdown");
+
+        if (userMenuButton && userMenuDropdown) {
+          userMenuButton.addEventListener("click", (e) => {
+            e.stopPropagation();
+            userMenuDropdown.classList.toggle("hidden");
+          });
+
+          document.addEventListener("click", (e) => {
+            if (!e.target.closest("#userMenuContainer")) {
+              userMenuDropdown.classList.add("hidden");
+            }
+          });
+        }
+      }
+
+      // Logout function
+      function handleLogout() {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        showToast("Logged out successfully", "success");
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 500);
+      }
+
+      // Toast notification function
+      function showToast(message, type = "info") {
+        const toastContainer = document.getElementById("toastContainer");
+        const toast = document.createElement("div");
+
+        const colors = {
+          success: "bg-success text-surface",
+          error: "bg-error text-surface",
+          warning: "bg-warning text-surface",
+          info: "bg-info text-surface",
+        };
+
+        toast.className = `${colors[type] || colors.info} px-6 py-4 rounded-lg shadow-xl transform transition-all duration-300 translate-x-0 opacity-100`;
+        toast.innerHTML = `
+                <div class="flex items-center gap-3">
+                    <span class="text-sm font-medium">${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" class="ml-2 hover:opacity-80">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            `;
+
+        toastContainer.appendChild(toast);
+        lucide.createIcons();
+
+        setTimeout(() => {
+          toast.style.transform = "translateX(400px)";
+          toast.style.opacity = "0";
+          setTimeout(() => toast.remove(), 300);
+        }, 4000);
+      }
+    </script>
+
+    {% block extra_js %}{% endblock %}
+  </body>
+</html>

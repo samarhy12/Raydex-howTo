@@ -1,9 +1,0 @@
-Flask
-Flask-SQLAlchemy
-Flask-Login
-Flask-CORS
-email-validator
-python-dotenv
-Werkzeug
-requests
-pymysql
