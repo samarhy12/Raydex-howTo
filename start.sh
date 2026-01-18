@@ -41,4 +41,4 @@ echo "Press Ctrl+C to stop the server"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
 
-python3 app_with_templates.py
+python3 app.py

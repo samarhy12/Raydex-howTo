@@ -52,34 +52,42 @@ A **complete, production-ready blog platform** with HTML/Tailwind CSS frontend a
 ### 🌐 API Endpoints
 
 **Authentication** (3 endpoints)
+
 - Register, Login, Get Current User
 
 **Posts** (5 endpoints)
+
 - List, Get, Create, Update, Delete
 
 **Comments** (2 endpoints)
+
 - List comments for post, Add comment
 
 **Requests** (4 endpoints)
+
 - List, Create, Update, Delete
 
 **Admin** (1 endpoint)
+
 - Dashboard statistics
 
 ## 🎯 Key Features
 
 ### For Visitors
+
 - Browse and search articles
 - Read articles
 - Leave comments
 
 ### For Users
+
 - All visitor features
 - Request custom guides
 - Track request progress
 - Profile management
 
 ### For Admins
+
 - All user features
 - Create/edit/delete articles
 - Manage requests
@@ -90,7 +98,7 @@ A **complete, production-ready blog platform** with HTML/Tailwind CSS frontend a
 
 ```
 raydex-blog/
-├── app_with_templates.py       (Main Flask app - 400+ lines)
+├── app.py       (Main Flask app - 400+ lines)
 ├── templates/                  (12 HTML templates)
 ├── static/
 │   └── uploads/               (Image storage)
@@ -112,7 +120,7 @@ raydex-blog/
 pip install flask flask-sqlalchemy flask-cors pyjwt werkzeug
 
 # 2. Run the server
-python app_with_templates.py
+python app.py
 
 # 3. Open browser
 http://localhost:5000
@@ -172,6 +180,7 @@ The design matches your React components exactly:
 ## 🔄 Customization Options
 
 ### Easy Customizations:
+
 - Colors (in `base.html` Tailwind config)
 - Fonts (Google Fonts links in `base.html`)
 - Logo/branding (in navigation)
@@ -179,12 +188,14 @@ The design matches your React components exactly:
 - Toast notification styles
 
 ### Medium Customizations:
+
 - Add new pages (create template, add route)
-- Modify database schema (models in `app_with_templates.py`)
+- Modify database schema (models in `app.py`)
 - Add API endpoints
 - Change authentication logic
 
 ### Advanced Customizations:
+
 - Switch database (PostgreSQL, MySQL)
 - Add email notifications
 - Implement real-time features (WebSockets)

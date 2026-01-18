@@ -22,7 +22,7 @@ pip install flask flask-sqlalchemy flask-cors pyjwt werkzeug
 ### Step 2: Run the Server
 
 ```bash
-python app_with_templates.py
+python app.py
 ```
 
 Or use the start script:
@@ -40,18 +40,21 @@ That's it! 🎉
 ## 📱 What You Can Do
 
 ### As a Visitor
+
 - ✅ Browse articles
 - ✅ Search for topics
 - ✅ Read articles
 - ✅ Leave comments
 
 ### As a User (After Registration)
+
 - ✅ All visitor features +
 - ✅ Request custom how-to guides
 - ✅ Track request status
 - ✅ Manage your profile
 
 ### As an Admin
+
 - ✅ All user features +
 - ✅ Create/edit/delete articles
 - ✅ Manage user requests
@@ -72,7 +75,7 @@ Password: admin123
 
 ```
 raydex-blog/
-├── app_with_templates.py       ← Main application (run this!)
+├── app.py       ← Main application (run this!)
 ├── templates/                   ← HTML templates
 │   ├── base.html               ← Base template (nav, footer)
 │   ├── home.html               ← Homepage with article grid
@@ -123,7 +126,7 @@ python3
 
 ### Change the Port
 
-Edit `app_with_templates.py`, last line:
+Edit `app.py`, last line:
 
 ```python
 app.run(host='0.0.0.0', port=5001, debug=True)  # Changed from 5000 to 5001
@@ -133,7 +136,7 @@ app.run(host='0.0.0.0', port=5001, debug=True)  # Changed from 5000 to 5001
 
 ```bash
 rm raydex.db
-python app_with_templates.py
+python app.py
 ```
 
 This creates a fresh database with the default admin user.
@@ -143,7 +146,10 @@ This creates a fresh database with the default admin user.
 Create `static/css/custom.css` and link it in `templates/base.html`:
 
 ```html
-<link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/custom.css') }}"
+/>
 ```
 
 ### Add Custom JavaScript
@@ -173,6 +179,7 @@ Create `static/js/custom.js` and link it in `templates/base.html`:
 ### Option 2: Platform-as-a-Service
 
 **Heroku**:
+
 ```bash
 # Create Procfile
 echo "web: gunicorn app_with_templates:app" > Procfile
@@ -186,6 +193,7 @@ git push heroku main
 ```
 
 **Railway.app**:
+
 - Connect your GitHub repo
 - Auto-detects Python
 - Deploy with one click
@@ -193,12 +201,14 @@ git push heroku main
 ## 📊 Database Schema
 
 ### Tables Created:
+
 - `user` - User accounts (with JWT auth)
 - `post` - Blog articles
 - `comment` - Article comments
 - `question_request` - Custom guide requests
 
 ### Relationships:
+
 - User → QuestionRequests (one-to-many)
 - User → Comments (one-to-many)
 - Post → Comments (one-to-many)
@@ -222,13 +232,14 @@ pip install -r requirements.txt
 ```
 
 Or manually:
+
 ```bash
 pip install flask flask-sqlalchemy flask-cors pyjwt werkzeug
 ```
 
 ### "Port already in use"
 
-Change the port in `app_with_templates.py` or kill the process:
+Change the port in `app.py` or kill the process:
 
 ```bash
 # Find process on port 5000
@@ -252,7 +263,7 @@ SQLite can lock with concurrent access. For production, use PostgreSQL:
 ```bash
 pip install psycopg2-binary
 export DATABASE_URL="postgresql://user:pass@localhost/raydex"
-python app_with_templates.py
+python app.py
 ```
 
 ## 📚 Learn More
@@ -273,7 +284,7 @@ python app_with_templates.py
 
 Your blog platform is fully functional and ready to use. Here's what to do next:
 
-1. ✅ Start the server (`python app_with_templates.py`)
+1. ✅ Start the server (`python app.py`)
 2. ✅ Login as admin (admin@raydex.com / admin123)
 3. ✅ **Change the admin password!**
 4. ✅ Create your first blog post
@@ -284,4 +295,4 @@ Your blog platform is fully functional and ready to use. Here's what to do next:
 
 ---
 
-*This platform matches your React design pixel-perfect using HTML, Tailwind CSS, and Flask.*
+_This platform matches your React design pixel-perfect using HTML, Tailwind CSS, and Flask._

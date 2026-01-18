@@ -26,10 +26,11 @@ For development, the app will use default values.
 ### 4. Run the Application
 
 ```bash
-python app_with_templates.py
+python app.py
 ```
 
 This will:
+
 - Create the database and tables
 - Create an admin user (admin@raydex.com / admin123)
 - Start the server at http://localhost:5000
@@ -37,6 +38,7 @@ This will:
 ### 5. Access the Application
 
 Open your browser and navigate to:
+
 - **Home Page**: http://localhost:5000
 - **Login**: http://localhost:5000/login
 - **Register**: http://localhost:5000/register
@@ -55,7 +57,7 @@ Password: admin123
 
 ```
 raydex-blog/
-├── app_with_templates.py       # Main Flask application
+├── app.py       # Main Flask application
 ├── templates/                   # HTML templates
 │   ├── base.html               # Base template with nav/footer
 │   ├── home.html               # Home page
@@ -92,28 +94,34 @@ raydex-blog/
 ## Database Models
 
 ### User
+
 - id, name, email, password_hash, role, avatar, created_at
 - Relationships: question_requests, comments
 
 ### Post
+
 - id, title, subtitle, author, content (JSON), views, created_at, updated_at
 - Relationships: comments
 
 ### Comment
+
 - id, name, email, comment, post_id, user_id, created_at
 
 ### QuestionRequest
+
 - id, title, category, priority, description, status, user_id, article_id
 - created_at, estimated_delivery, completed_at
 
 ## API Endpoints
 
 ### Authentication
+
 - `POST /api/auth/register` - Register user
 - `POST /api/auth/login` - Login user
 - `GET /api/auth/me` - Get current user
 
 ### Posts
+
 - `GET /api/posts` - Get all posts (optional ?q=search)
 - `GET /api/posts/:id` - Get single post
 - `POST /api/posts` - Create post (admin only)
@@ -121,23 +129,26 @@ raydex-blog/
 - `DELETE /api/posts/:id` - Delete post (admin only)
 
 ### Comments
+
 - `GET /api/posts/:id/comments` - Get comments
 - `POST /api/posts/:id/comments` - Add comment
 
 ### Requests
+
 - `GET /api/requests` - Get user's requests
 - `POST /api/requests` - Create request
 - `PUT /api/requests/:id` - Update request (admin)
 - `DELETE /api/requests/:id` - Delete request (admin)
 
 ### Admin
+
 - `GET /api/admin/dashboard` - Get statistics
 
 ## Configuration
 
 ### Change Secret Key
 
-Edit `app_with_templates.py`:
+Edit `app.py`:
 
 ```python
 app.config['SECRET_KEY'] = 'your-new-secret-key'
@@ -165,7 +176,7 @@ export DATABASE_URL="mysql://user:pass@localhost/raydex"
 
 ### File Upload Limits
 
-Edit in `app_with_templates.py`:
+Edit in `app.py`:
 
 ```python
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB
@@ -176,6 +187,7 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB
 ### 1. Use a Production Server
 
 Don't use Flask's built-in server in production. Use:
+
 - **Gunicorn**: `pip install gunicorn`
 - Run: `gunicorn -w 4 app_with_templates:app`
 
@@ -211,7 +223,7 @@ Use a reverse proxy (Nginx/Apache) with SSL certificates (Let's Encrypt).
 
 ### Port Already in Use
 
-Change the port in `app_with_templates.py`:
+Change the port in `app.py`:
 
 ```python
 app.run(host='0.0.0.0', port=5001, debug=True)
@@ -223,7 +235,7 @@ Delete the database file and restart:
 
 ```bash
 rm raydex.db
-python app_with_templates.py
+python app.py
 ```
 
 ### Upload Folder Permission
@@ -263,6 +275,7 @@ with app.app_context():
 ## Support
 
 For issues or questions:
+
 1. Check this installation guide
 2. Review the README.md
 3. Check Flask documentation: https://flask.palletsprojects.com/

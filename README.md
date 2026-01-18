@@ -6,7 +6,7 @@ Complete HTML implementation of the Raydex blog platform with Tailwind CSS and F
 
 ```
 raydex-blog/
-├── app_with_templates.py      # Main Flask application with template routes
+├── app.py      # Main Flask application with template routes
 ├── templates/                  # HTML templates
 │   ├── base.html              # Base template with navigation & footer
 │   ├── home.html              # Home page with article grid
@@ -68,10 +68,11 @@ export DATABASE_URL="sqlite:///raydex.db"  # or your database URL
 ### 3. Initialize Database
 
 ```bash
-python app_with_templates.py
+python app.py
 ```
 
 This will:
+
 - Create the database tables
 - Create an admin user (admin@raydex.com / admin123)
 - Start the server on http://localhost:5000
@@ -95,11 +96,13 @@ This will:
 All API endpoints from the original backend are included:
 
 ### Authentication
+
 - `POST /api/auth/register` - Register new user
 - `POST /api/auth/login` - Login user
 - `GET /api/auth/me` - Get current user
 
 ### Posts
+
 - `GET /api/posts` - Get all posts (with optional search)
 - `GET /api/posts/:id` - Get single post
 - `POST /api/posts` - Create post (admin only)
@@ -107,21 +110,25 @@ All API endpoints from the original backend are included:
 - `DELETE /api/posts/:id` - Delete post (admin only)
 
 ### Comments
+
 - `GET /api/posts/:id/comments` - Get comments for post
 - `POST /api/posts/:id/comments` - Add comment
 
 ### Requests
+
 - `GET /api/requests` - Get user requests
 - `POST /api/requests` - Create new request
 - `PUT /api/requests/:id` - Update request (admin only)
 - `DELETE /api/requests/:id` - Delete request (admin only)
 
 ### Admin
+
 - `GET /api/admin/dashboard` - Get dashboard statistics
 
 ## 🎯 Usage
 
 ### For Users
+
 1. Register an account or log in
 2. Browse articles on the home page
 3. Search for specific topics
@@ -129,6 +136,7 @@ All API endpoints from the original backend are included:
 5. Request custom guides from your dashboard
 
 ### For Admins
+
 1. Log in with admin credentials
 2. Access the admin dashboard
 3. Create, edit, or delete articles
@@ -138,13 +146,15 @@ All API endpoints from the original backend are included:
 ## 🔧 Customization
 
 ### Styling
+
 - Tailwind CSS is loaded via CDN
 - Custom colors are defined in the base template
 - Modify `tailwind.config` in base.html for theme changes
 
 ### Adding Features
+
 - Templates extend `base.html` for consistency
-- Add new routes in `app_with_templates.py`
+- Add new routes in `app.py`
 - Create corresponding HTML templates
 
 ## 📱 Responsive Breakpoints
