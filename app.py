@@ -481,21 +481,5 @@ def get_admin_dashboard():
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
-# ==================== Database Init ====================
-
-def init_db():
-    with app.app_context():
-        db.create_all()
-        admin = User.query.filter_by(email='admin@raydex.com').first()
-        if not admin:
-            admin = User(name='Agyarey Raphael', email='admin@raydex.com', role='admin')
-            admin.set_password('admin123')
-            db.session.add(admin)
-            db.session.commit()
-            print('✅ Admin user created: admin@raydex.com / admin123')
-        print('✅ Database initialized')
-
 if __name__ == '__main__':
-    init_db()
-    print('🌐 Server: http://localhost:5000')
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(debug=False)
