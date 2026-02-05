@@ -60,9 +60,18 @@ block content %}
               type="password"
               id="password"
               required
-              class="w-full pl-12 pr-4 py-3.5 border border-border rounded-lg bg-surface text-ink placeholder-ink-muted transition-all duration-fast focus:outline-none focus:border-accent focus:ring-4 focus:ring-accent-light"
+              class="w-full pl-12 pr-12 py-3.5 border border-border rounded-lg bg-surface text-ink placeholder-ink-muted transition-all duration-fast focus:outline-none focus:border-accent focus:ring-4 focus:ring-accent-light"
               placeholder="••••••••"
             />
+            <button
+              type="button"
+              id="togglePassword"
+              class="absolute inset-y-0 right-0 pr-4 flex items-center text-ink-muted hover:text-ink transition-colors"
+              aria-label="Toggle password visibility"
+            >
+              <i data-lucide="eye" id="eyeIcon" class="w-[18px] h-[18px]"></i>
+              <i data-lucide="eye-off" id="eyeOffIcon" class="w-[18px] h-[18px] hidden"></i>
+            </button>
           </div>
         </div>
 
@@ -79,7 +88,7 @@ block content %}
       <div class="mt-6 text-center">
         <p class="text-sm text-ink-soft">
           Don't have an account?
-          <a
+          
             href="/register"
             class="text-accent font-medium hover:text-accent-soft transition-colors"
             >Create one</a
@@ -91,6 +100,21 @@ block content %}
 </div>
 {% endblock %} {% block extra_js %}
 <script>
+  // Password toggle functionality
+  const togglePassword = document.getElementById("togglePassword");
+  const passwordInput = document.getElementById("password");
+  const eyeIcon = document.getElementById("eyeIcon");
+  const eyeOffIcon = document.getElementById("eyeOffIcon");
+
+  togglePassword.addEventListener("click", () => {
+    const type = passwordInput.type === "password" ? "text" : "password";
+    passwordInput.type = type;
+    
+    // Toggle icons
+    eyeIcon.classList.toggle("hidden");
+    eyeOffIcon.classList.toggle("hidden");
+  });
+
   // Check if already logged in - redirect if so
   document.addEventListener("DOMContentLoaded", () => {
     const token = localStorage.getItem("token");
