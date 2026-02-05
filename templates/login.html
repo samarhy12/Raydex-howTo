@@ -70,7 +70,11 @@ block content %}
               aria-label="Toggle password visibility"
             >
               <i data-lucide="eye" id="eyeIcon" class="w-[18px] h-[18px]"></i>
-              <i data-lucide="eye-off" id="eyeOffIcon" class="w-[18px] h-[18px] hidden"></i>
+              <i
+                data-lucide="eye-off"
+                id="eyeOffIcon"
+                class="w-[18px] h-[18px] hidden"
+              ></i>
             </button>
           </div>
         </div>
@@ -88,7 +92,7 @@ block content %}
       <div class="mt-6 text-center">
         <p class="text-sm text-ink-soft">
           Don't have an account?
-          
+          <a
             href="/register"
             class="text-accent font-medium hover:text-accent-soft transition-colors"
             >Create one</a
@@ -109,7 +113,7 @@ block content %}
   togglePassword.addEventListener("click", () => {
     const type = passwordInput.type === "password" ? "text" : "password";
     passwordInput.type = type;
-    
+
     // Toggle icons
     eyeIcon.classList.toggle("hidden");
     eyeOffIcon.classList.toggle("hidden");
