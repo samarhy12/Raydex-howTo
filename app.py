@@ -1,7 +1,7 @@
 import os
 from datetime import datetime, timedelta
 from functools import wraps
-from flask import Flask, request, jsonify, send_from_directory, render_template, redirect, url_for, session
+from flask import Flask, request, jsonify, send_from_directory, render_template, redirect, url_for, session, make_response
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -22,7 +22,12 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
-CORS(app, supports_credentials=True)
+# Enhanced CORS configuration
+CORS(app, 
+     supports_credentials=True,
+     origins=["*"],
+     allow_headers=["Content-Type", "Authorization"],
+     methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
 
 db = SQLAlchemy(app)
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
@@ -320,33 +325,56 @@ def admin_requests_page(current_user):
     return render_template('admin_requests.html')
 
 # ==================== All API Routes from Original Backend ====================
-# (Include all the API routes from the original backend.py file here)
 
 # Auth Routes
-@app.route('/api/auth/register', methods=['POST'])
+@app.route('/api/auth/register', methods=['POST', 'OPTIONS'])
 def register():
-    data = request.get_json()
-    if not data.get('name') or not data.get('email') or not data.get('password'):
-        return jsonify({'success': False, 'error': 'Missing required fields'}), 400
-    if User.query.filter_by(email=data['email']).first():
-        return jsonify({'success': False, 'error': 'Email already registered'}), 400
-    user = User(name=data['name'], email=data['email'], role='user')
-    user.set_password(data['password'])
-    db.session.add(user)
-    db.session.commit()
-    token = user.generate_token()
-    return jsonify({'success': True, 'user': user.to_dict(), 'token': token}), 201
+    if request.method == 'OPTIONS':
+        return '', 204
+    
+    try:
+        data = request.get_json(force=True)
+        if not data:
+            return jsonify({'success': False, 'error': 'No data provided'}), 400
+            
+        if not data.get('name') or not data.get('email') or not data.get('password'):
+            return jsonify({'success': False, 'error': 'Missing required fields'}), 400
+        
+        if User.query.filter_by(email=data['email']).first():
+            return jsonify({'success': False, 'error': 'Email already registered'}), 400
+        
+        user = User(name=data['name'], email=data['email'], role='user')
+        user.set_password(data['password'])
+        db.session.add(user)
+        db.session.commit()
+        token = user.generate_token()
+        return jsonify({'success': True, 'user': user.to_dict(), 'token': token}), 201
+    except Exception as e:
+        print(f"Register error: {e}")
+        return jsonify({'success': False, 'error': 'Server error'}), 500
 
-@app.route('/api/auth/login', methods=['POST'])
+@app.route('/api/auth/login', methods=['POST', 'OPTIONS'])
 def login():
-    data = request.get_json()
-    if not data.get('email') or not data.get('password'):
-        return jsonify({'success': False, 'error': 'Missing required fields'}), 400
-    user = User.query.filter_by(email=data['email']).first()
-    if not user or not user.check_password(data['password']):
-        return jsonify({'success': False, 'error': 'Invalid credentials'}), 401
-    token = user.generate_token()
-    return jsonify({'success': True, 'user': user.to_dict(), 'token': token})
+    if request.method == 'OPTIONS':
+        return '', 204
+    
+    try:
+        data = request.get_json(force=True)
+        if not data:
+            return jsonify({'success': False, 'error': 'No data provided'}), 400
+            
+        if not data.get('email') or not data.get('password'):
+            return jsonify({'success': False, 'error': 'Missing required fields'}), 400
+        
+        user = User.query.filter_by(email=data['email']).first()
+        if not user or not user.check_password(data['password']):
+            return jsonify({'success': False, 'error': 'Invalid credentials'}), 401
+        
+        token = user.generate_token()
+        return jsonify({'success': True, 'user': user.to_dict(), 'token': token})
+    except Exception as e:
+        print(f"Login error: {e}")
+        return jsonify({'success': False, 'error': 'Server error'}), 500
 
 @app.route('/api/auth/me', methods=['GET'])
 def get_current_user_api():
@@ -468,5 +496,6 @@ def init_db():
         print('✅ Database initialized')
 
 if __name__ == '__main__':
+    init_db()
     print('🌐 Server: http://localhost:5000')
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000, debug=True)
